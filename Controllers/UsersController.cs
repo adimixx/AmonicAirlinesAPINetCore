@@ -34,12 +34,21 @@ namespace AmonicAirlinesAPI.Controllers
                 Email = x.Email,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                Office = x.Office.Title,
+                Office = x.Office.Title ?? null,
                 OfficeId = x.OfficeId,
                 Password = x.Password,
                 Role = x.Role.Title,
                 RoleId = x.RoleId
             }).ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UserViewModel>> Create(UserCreateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
         }
     }
 }
