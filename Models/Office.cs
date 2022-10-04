@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 
 namespace AmonicAirlinesAPI.Models
 {
@@ -16,7 +15,10 @@ namespace AmonicAirlinesAPI.Models
         public string Phone { get; set; } = null!;
         public string Contact { get; set; } = null!;
 
+        [JsonIgnore]
         public virtual Country Country { get; set; } = null!;
+
+        [JsonIgnore]
         public virtual ICollection<User> Users { get; set; }
     }
 }

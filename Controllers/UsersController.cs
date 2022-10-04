@@ -1,6 +1,5 @@
 ﻿using AmonicAirlinesAPI.Models;
 using AmonicAirlinesAPI.Models.Request;
-using AmonicAirlinesAPI.Models.View;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,7 @@ namespace AmonicAirlinesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<UserViewModel>>> Index([FromQuery] UserIndexModel model)
+        public async Task<ActionResult<List<User>>> Index([FromQuery] UserIndexModel model)
         {
             var Query = _context.Users.Include("Office").Include("Role").AsQueryable();
 
@@ -26,29 +25,24 @@ namespace AmonicAirlinesAPI.Controllers
                 Query = Query.Where(x => x.OfficeId == model.OfficeId);
             }
 
-            return await Query.Select(x => new UserViewModel
-            {
-                Id = x.Id,
-                Active = x.Active,
-                Birthdate = x.Birthdate,
-                Email = x.Email,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Office = x.Office.Title ?? null,
-                OfficeId = x.OfficeId,
-                Password = x.Password,
-                Role = x.Role.Title,
-                RoleId = x.RoleId
-            }).ToListAsync();
+            return await Query.ToListAsync();
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserViewModel>> Create(UserCreateModel model)
+        public async Task<ActionResult<User>> PostUser([FromForm] User model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-
+                return BadRequest(ModelState);
             }
+
+            model.RoleId = _context.Roles.Where(x => x.Title == "User").First().Id;
+            model.Active = true;
+
+            _context.Users.Add(model);
+            await _context.SaveChangesAsync();
+
+            return model;
         }
     }
 }

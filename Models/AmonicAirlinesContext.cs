@@ -69,7 +69,6 @@ namespace AmonicAirlinesAPI.Models
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
                     .HasColumnName("ID");
 
                 entity.Property(e => e.Birthdate).HasColumnType("date");
