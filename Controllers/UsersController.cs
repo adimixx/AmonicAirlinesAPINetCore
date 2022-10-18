@@ -44,5 +44,26 @@ namespace AmonicAirlinesAPI.Controllers
 
             return model;
         }
+
+        [HttpPut("{Id}")]
+        public async Task<ActionResult<User>> PutUser([FromForm] User model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _context.Users.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+
+            user.Email = model.Email;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.OfficeId = model.OfficeId;
+            user.RoleId = model.RoleId;
+
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
     }
 }

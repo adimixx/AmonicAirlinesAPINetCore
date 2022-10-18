@@ -1,5 +1,5 @@
-﻿using AmonicAirlinesAPI.Validators;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Structr.AspNetCore.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,6 +8,7 @@ namespace AmonicAirlinesAPI.Models
     public partial class User
     {
         [Key]
+        [FromRoute]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
@@ -20,7 +21,7 @@ namespace AmonicAirlinesAPI.Models
         [Unique(ErrorMessage = "Email address already exists")]
         public string Email { get; set; } = null!;
 
-        [Required]
+        [RequiredIf(nameof(Id), 0, Operator.EqualTo)]
         public string Password { get; set; } = null!;
 
         [Required]
@@ -35,7 +36,7 @@ namespace AmonicAirlinesAPI.Models
         [FromForm(Name = "office_id")]
         public int? OfficeId { get; set; }
 
-        [Required]
+        [RequiredIf(nameof(Id), 0, Operator.EqualTo)]
         [DataType(DataType.Date)]
         public DateTime? Birthdate { get; set; }
         public bool? Active { get; set; }

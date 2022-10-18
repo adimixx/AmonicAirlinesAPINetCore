@@ -3,6 +3,8 @@ using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAspNetCoreValidation();
+
 // Add services to the container.
 
 builder.Services.AddControllers()
